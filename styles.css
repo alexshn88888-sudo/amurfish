@@ -1,8 +1,44 @@
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #0f172a;
+  color: white;
+}
 
-body { font-family: Arial; margin:0; padding:0; }
-header { display:flex; justify-content:space-between; padding:20px; background:#111; color:#fff; }
-.hero { padding:50px; background:#f2f2f2; text-align:center; }
-#catalog { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; padding:20px; }
-.card { border:1px solid #ddd; padding:10px; }
-button { padding:10px; margin-top:5px; }
-.form { padding:20px; display:flex; gap:10px; }
+header {
+  padding: 20px;
+  background: #111827;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 20px;
+  padding: 20px;
+}
+
+#products {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.card {
+  background: #1f2937;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.card img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+button {
+  background: red;
+  color: white;
+  border: none;
+  padding: 5px;
+  margin-top: 5px;
+  cursor: pointer;
+}
