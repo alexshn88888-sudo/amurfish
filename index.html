@@ -1,35 +1,79 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Амурфиш</title>
+
   <link rel="stylesheet" href="styles.css">
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
 
-<header>
-  <h1>Амурфиш</h1>
-  <p>Свежая продукция со склада</p>
-</header>
+  <!-- HEADER -->
+  <header class="header">
 
-<main class="layout">
+    <div>
+      <h1>Амурфиш</h1>
+      <p>Свежая рыба и морепродукты</p>
+    </div>
 
-  <!-- ТОВАРЫ -->
-  <section>
-    <h2>Каталог</h2>
-    <div id="products"></div>
-  </section>
+    <a class="tg-btn" href="https://t.me/amurfish_16_16" target="_blank">
+      Telegram
+    </a>
 
-  <!-- КОРЗИНА -->
-  <aside>
-    <h2>Корзина</h2>
-    <div id="cart"></div>
-  </aside>
+  </header>
 
-</main>
+  <!-- MAIN -->
+  <main class="layout">
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="app.js"></script>
+    <!-- PRODUCTS -->
+    <section>
+
+      <div class="topbar">
+        <h2>Каталог</h2>
+
+        <input
+          type="text"
+          id="search"
+          placeholder="Поиск товара..."
+          onkeyup="searchProducts()"
+        >
+      </div>
+
+      <div id="products"></div>
+
+    </section>
+
+    <!-- CART -->
+    <aside>
+
+      <h2>Корзина</h2>
+
+      <div id="cart"></div>
+
+    </aside>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+
+    <p>© Амурфиш</p>
+
+    <a href="admin.html">
+      Админка
+    </a>
+
+  </footer>
+
+  <!-- APP -->
+  <script src="app.js"></script>
+
 </body>
+
+</html>
