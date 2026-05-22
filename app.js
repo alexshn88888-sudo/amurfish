@@ -1,18 +1,18 @@
-let products = JSON.parse(localStorage.getItem("products")) || [
-  {
-    id: 1,
-    name: "Навага свежемороженая",
-    price: 105,
-    description: "Свежая рыба со склада",
-    image: ""
-  }
-];
+const SUPABASE_URL = "https://ombhbcsjwwnvqcwwytql.supabase.co";
+const SUPABASE_KEY = "PUT_YOUR_ANON_KEY_HERE";
 
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-function save() {
-  localStorage.setItem("products", JSON.stringify(products));
-  localStorage.setItem("cart", JSON.stringify(cart));
+let cart = [];
+let products = [];
+
+// =====================
+// ЗАГРУЗКА ТОВАРОВ
+// =====================
+async function loadProducts() {
+  let { data } = await client.from("products").select("*");
+  products = data || [];
+  renderProducts();
 }
 
 // =====================
@@ -36,30 +36,29 @@ function renderProducts() {
 }
 
 // =====================
-// КОРЗИНА + СУММА
+// КОРЗИНА
 // =====================
 function addToCart(id) {
   const item = products.find(p => p.id === id);
   cart.push(item);
-  save();
   renderCart();
 }
 
 function removeFromCart(i) {
   cart.splice(i, 1);
-  save();
   renderCart();
 }
 
 function renderCart() {
   const box = document.getElementById("cart");
 
-  let total = cart.reduce((sum, item) => sum + Number(item.price), 0);
+  let total = cart.reduce((s, i) => s + Number(i.price), 0);
 
   box.innerHTML = `
     <h3>Корзина</h3>
     <p>Товаров: ${cart.length}</p>
     <p><b>Итого: ${total} ₽</b></p>
+    <button onclick="createOrder()">Оформить заказ</button>
   `;
 
   cart.forEach((c, i) => {
@@ -73,7 +72,25 @@ function renderCart() {
 }
 
 // =====================
-// ИНИЦИАЛИЗАЦИЯ
+// ЗАКАЗ
 // =====================
-renderProducts();
+async function createOrder() {
+  let total = cart.reduce((s, i) => s + Number(i.price), 0);
+
+  await client.from("orders").insert([
+    {
+      items: cart,
+      total: total
+    }
+  ]);
+
+  alert("Заказ оформлен!");
+  cart = [];
+  renderCart();
+}
+
+// =====================
+// INIT
+// =====================
+loadProducts();
 renderCart();
