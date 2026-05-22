@@ -1,23 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-<meta charset="UTF-8">
-<title>Админка Амурфиш</title>
-<link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <title>Админка</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-<h1>Админка</h1>
-<a href="index.html">На сайт</a>
 
-<div class="form">
-  <input id="name" placeholder="Название">
-  <input id="price" placeholder="Цена">
-  <input id="desc" placeholder="Описание">
-  <button onclick="addProduct()">Добавить</button>
-</div>
+<h2>Добавить товар</h2>
 
-<h2>Товары</h2>
-<div id="list"></div>
+<input id="name" placeholder="Название">
+<input id="price" placeholder="Цена">
+<input id="desc" placeholder="Описание">
+<input id="img" placeholder="Ссылка на фото">
+
+<button onclick="addProduct()">Добавить</button>
 
 <script src="admin.js"></script>
 </body>
