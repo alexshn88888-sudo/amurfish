@@ -1,38 +1,27 @@
-// =======================
-// AMURFISH SIMPLE STORE
-// =======================
-
 let products = JSON.parse(localStorage.getItem("products")) || [
   {
     id: 1,
     name: "Навага свежемороженая",
     price: 105,
     description: "Свежая рыба со склада",
-    image: "https://images.unsplash.com/photo-1544943910-4c1dc44aab44",
-  },
+    image: "https://images.unsplash.com/photo-1544943910-4c1dc44aab44"
+  }
 ];
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-// =======================
-// SAVE
-// =======================
 function save() {
   localStorage.setItem("products", JSON.stringify(products));
   localStorage.setItem("cart", JSON.stringify(cart));
 }
 
-// =======================
-// RENDER PRODUCTS
-// =======================
+// ТОВАРЫ
 function renderProducts() {
-  const container = document.getElementById("products");
-  if (!container) return;
+  const box = document.getElementById("products");
+  box.innerHTML = "";
 
-  container.innerHTML = "";
-
-  products.forEach((p) => {
-    container.innerHTML += `
+  products.forEach(p => {
+    box.innerHTML += `
       <div class="card">
         <img src="${p.image}" />
         <h3>${p.name}</h3>
@@ -44,32 +33,26 @@ function renderProducts() {
   });
 }
 
-// =======================
-// CART
-// =======================
+// КОРЗИНА
 function addToCart(id) {
-  const item = products.find((p) => p.id === id);
+  const item = products.find(p => p.id === id);
   cart.push(item);
   save();
   renderCart();
 }
 
-function removeFromCart(index) {
-  cart.splice(index, 1);
+function removeFromCart(i) {
+  cart.splice(i, 1);
   save();
   renderCart();
 }
 
 function renderCart() {
-  const container = document.getElementById("cart");
-  if (!container) return;
-
-  container.innerHTML = `
-    <h3>Корзина (${cart.length})</h3>
-  `;
+  const box = document.getElementById("cart");
+  box.innerHTML = `<p>Товаров: ${cart.length}</p>`;
 
   cart.forEach((c, i) => {
-    container.innerHTML += `
+    box.innerHTML += `
       <div>
         ${c.name} - ${c.price}₽
         <button onclick="removeFromCart(${i})">❌</button>
@@ -78,8 +61,5 @@ function renderCart() {
   });
 }
 
-// =======================
-// INIT
-// =======================
 renderProducts();
 renderCart();
