@@ -8,14 +8,21 @@
 
 <body>
 
-<h2>Добавить товар</h2>
+<header>
+  <h2>Админка Амурфиш</h2>
+</header>
 
-<input id="name" placeholder="Название">
-<input id="price" placeholder="Цена">
-<input id="desc" placeholder="Описание">
-<input id="img" placeholder="Ссылка на фото">
+<div style="padding:20px">
 
-<button onclick="addProduct()">Добавить</button>
+  <input id="name" placeholder="Название"><br><br>
+  <input id="price" placeholder="Цена"><br><br>
+  <input id="desc" placeholder="Описание"><br><br>
+
+  <input type="file" id="img"><br><br>
+
+  <button onclick="addProduct()">Добавить товар</button>
+
+</div>
 
 <script src="admin.js"></script>
 </body>
