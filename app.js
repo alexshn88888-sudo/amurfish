@@ -4,7 +4,7 @@ let products = JSON.parse(localStorage.getItem("products")) || [
     name: "Навага свежемороженая",
     price: 105,
     description: "Свежая рыба со склада",
-    image: "https://images.unsplash.com/photo-1544943910-4c1dc44aab44"
+    image: ""
   }
 ];
 
@@ -15,7 +15,9 @@ function save() {
   localStorage.setItem("cart", JSON.stringify(cart));
 }
 
+// =====================
 // ТОВАРЫ
+// =====================
 function renderProducts() {
   const box = document.getElementById("products");
   box.innerHTML = "";
@@ -23,7 +25,7 @@ function renderProducts() {
   products.forEach(p => {
     box.innerHTML += `
       <div class="card">
-        <img src="${p.image}" />
+        <img src="${p.image || 'https://via.placeholder.com/300'}" />
         <h3>${p.name}</h3>
         <p>${p.description}</p>
         <b>${p.price} ₽</b>
@@ -33,7 +35,9 @@ function renderProducts() {
   });
 }
 
-// КОРЗИНА
+// =====================
+// КОРЗИНА + СУММА
+// =====================
 function addToCart(id) {
   const item = products.find(p => p.id === id);
   cart.push(item);
@@ -49,7 +53,14 @@ function removeFromCart(i) {
 
 function renderCart() {
   const box = document.getElementById("cart");
-  box.innerHTML = `<p>Товаров: ${cart.length}</p>`;
+
+  let total = cart.reduce((sum, item) => sum + Number(item.price), 0);
+
+  box.innerHTML = `
+    <h3>Корзина</h3>
+    <p>Товаров: ${cart.length}</p>
+    <p><b>Итого: ${total} ₽</b></p>
+  `;
 
   cart.forEach((c, i) => {
     box.innerHTML += `
@@ -61,5 +72,8 @@ function renderCart() {
   });
 }
 
+// =====================
+// ИНИЦИАЛИЗАЦИЯ
+// =====================
 renderProducts();
 renderCart();
