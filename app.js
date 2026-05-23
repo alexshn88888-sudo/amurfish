@@ -1,14 +1,14 @@
-
 const SUPABASE_URL =
   "https://ombhbcsjwwnvqcwwytql.supabase.co";
 
 const SUPABASE_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9tYmhiY3Nqd3dudnFjd3d5dHFsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0NDU4MzQsImV4cCI6MjA5NTAyMTgzNH0.3y6c1iMR3wHZejYry9GvktO7g2rRUVXmdIu8aLhkdO8";
 
-const client = supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
+const client =
+  supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
 
 let products = [];
 let categories = [];
@@ -21,6 +21,7 @@ async function init() {
 
   await loadCategories();
   await loadProducts();
+
   loadCart();
 }
 
@@ -92,7 +93,7 @@ function renderCategories() {
 }
 
 // =======================
-// CATEGORY FILTER
+// FILTER CATEGORY
 // =======================
 function filterByCategory(category) {
 
@@ -141,13 +142,12 @@ function searchProducts() {
 }
 
 // =======================
-// SORT PRICE
+// SORT
 // =======================
 function sortPrice(type) {
 
   let filtered = [...products];
 
-  // CATEGORY
   if (currentCategory !== "all") {
 
     filtered = filtered.filter(
@@ -155,7 +155,6 @@ function sortPrice(type) {
     );
   }
 
-  // SEARCH
   const value =
     document
       .getElementById("search")
@@ -176,7 +175,6 @@ function sortPrice(type) {
     );
   });
 
-  // SORT
   if (type === "cheap") {
 
     filtered.sort(
@@ -208,16 +206,11 @@ function renderProducts(list) {
 
   box.innerHTML = "";
 
-  // NOTHING FOUND
   if (list.length === 0) {
 
     box.innerHTML = `
       <div class="card">
-
-        <h2>
-          Ничего не найдено 😢
-        </h2>
-
+        <h2>Ничего не найдено 😢</h2>
       </div>
     `;
 
@@ -226,9 +219,28 @@ function renderProducts(list) {
 
   list.forEach((p) => {
 
+    const oldPrice =
+      p.old_price
+      ? `<span class="old-price">${p.old_price} ₽</span>`
+      : "";
+
+    const badge =
+      p.badge
+      ? `<div class="badge">${p.badge}</div>`
+      : "";
+
     box.innerHTML += `
     
       <div class="card">
+
+        ${badge}
+
+        <button
+          class="fav-btn"
+          onclick="toggleFavorite('${p.id}')"
+        >
+          ❤️
+        </button>
 
         <img src="${p.image}" />
 
@@ -236,7 +248,13 @@ function renderProducts(list) {
 
         <p>${p.description || ""}</p>
 
-        <b>${p.price} ₽</b>
+        <div class="price-box">
+
+          <b>${p.price} ₽</b>
+
+          ${oldPrice}
+
+        </div>
 
         <button onclick="
           addToCart(
@@ -253,6 +271,34 @@ function renderProducts(list) {
 }
 
 // =======================
+// FAVORITES
+// =======================
+function toggleFavorite(id) {
+
+  let favorites =
+    JSON.parse(
+      localStorage.getItem("favorites")
+    ) || [];
+
+  if (favorites.includes(id)) {
+
+    favorites =
+      favorites.filter(
+        item => item !== id
+      );
+
+  } else {
+
+    favorites.push(id);
+  }
+
+  localStorage.setItem(
+    "favorites",
+    JSON.stringify(favorites)
+  );
+}
+
+// =======================
 // CART
 // =======================
 function addToCart(name, price) {
@@ -262,10 +308,23 @@ function addToCart(name, price) {
       localStorage.getItem("cart")
     ) || [];
 
-  cart.push({
-    name,
-    price
-  });
+  const existing =
+    cart.find(
+      item => item.name === name
+    );
+
+  if (existing) {
+
+    existing.quantity += 1;
+
+  } else {
+
+    cart.push({
+      name,
+      price,
+      quantity: 1
+    });
+  }
 
   localStorage.setItem(
     "cart",
@@ -296,13 +355,18 @@ function loadCart() {
 
   cart.forEach((item, index) => {
 
-    total += Number(item.price);
+    total +=
+      Number(item.price) *
+      item.quantity;
 
     box.innerHTML += `
     
       <div class="cart-item">
 
-        <p>${item.name}</p>
+        <p>
+          ${item.name}
+          × ${item.quantity}
+        </p>
 
         <b>${item.price} ₽</b>
 
@@ -353,7 +417,7 @@ function removeCart(index) {
 function checkout() {
 
   alert(
-    "Заказ оформлен! Мы свяжемся с вами."
+    "Заказ оформлен!"
   );
 
   localStorage.removeItem("cart");
