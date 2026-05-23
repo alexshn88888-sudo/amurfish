@@ -12,6 +12,7 @@ const client = supabase.createClient(
 
 let products = [];
 let categories = [];
+let currentCategory = "all";
 
 // =======================
 // INIT
@@ -20,6 +21,7 @@ async function init() {
 
   await loadCategories();
   await loadProducts();
+  loadCart();
 }
 
 // =======================
@@ -31,7 +33,9 @@ async function loadProducts() {
     await client
       .from("products")
       .select("*")
-      .order("id", { ascending: false });
+      .order("id", {
+        ascending: false
+      });
 
   if (error) {
     console.log(error);
@@ -71,10 +75,11 @@ function renderCategories() {
   const box =
     document.getElementById("categories");
 
-  if (!box) return;
-
-  box.innerHTML =
-    `<button onclick="filterByCategory('all')">Все</button>`;
+  box.innerHTML = `
+    <button onclick="filterByCategory('all')">
+      Все
+    </button>
+  `;
 
   categories.forEach((c) => {
 
@@ -87,20 +92,50 @@ function renderCategories() {
 }
 
 // =======================
-// FILTER
+// CATEGORY FILTER
 // =======================
 function filterByCategory(category) {
 
-  if (category === "all") {
+  currentCategory = category;
 
-    renderProducts(products);
-    return;
+  searchProducts();
+}
+
+// =======================
+// SEARCH
+// =======================
+function searchProducts() {
+
+  const value =
+    document
+      .getElementById("search")
+      .value
+      .toLowerCase();
+
+  let filtered = [...products];
+
+  // CATEGORY
+  if (currentCategory !== "all") {
+
+    filtered = filtered.filter(
+      p => p.category === currentCategory
+    );
   }
 
-  const filtered =
-    products.filter(
-      p => p.category === category
+  // SEARCH
+  filtered = filtered.filter((p) => {
+
+    const name =
+      (p.name || "").toLowerCase();
+
+    const desc =
+      (p.description || "").toLowerCase();
+
+    return (
+      name.includes(value) ||
+      desc.includes(value)
     );
+  });
 
   renderProducts(filtered);
 }
@@ -110,23 +145,57 @@ function filterByCategory(category) {
 // =======================
 function sortPrice(type) {
 
-  let sorted = [...products];
+  let filtered = [...products];
 
+  // CATEGORY
+  if (currentCategory !== "all") {
+
+    filtered = filtered.filter(
+      p => p.category === currentCategory
+    );
+  }
+
+  // SEARCH
+  const value =
+    document
+      .getElementById("search")
+      .value
+      .toLowerCase();
+
+  filtered = filtered.filter((p) => {
+
+    const name =
+      (p.name || "").toLowerCase();
+
+    const desc =
+      (p.description || "").toLowerCase();
+
+    return (
+      name.includes(value) ||
+      desc.includes(value)
+    );
+  });
+
+  // SORT
   if (type === "cheap") {
 
-    sorted.sort((a, b) =>
-      Number(a.price) - Number(b.price)
+    filtered.sort(
+      (a, b) =>
+        Number(a.price) -
+        Number(b.price)
     );
   }
 
   if (type === "expensive") {
 
-    sorted.sort((a, b) =>
-      Number(b.price) - Number(a.price)
+    filtered.sort(
+      (a, b) =>
+        Number(b.price) -
+        Number(a.price)
     );
   }
 
-  renderProducts(sorted);
+  renderProducts(filtered);
 }
 
 // =======================
@@ -139,9 +208,26 @@ function renderProducts(list) {
 
   box.innerHTML = "";
 
+  // NOTHING FOUND
+  if (list.length === 0) {
+
+    box.innerHTML = `
+      <div class="card">
+
+        <h2>
+          Ничего не найдено 😢
+        </h2>
+
+      </div>
+    `;
+
+    return;
+  }
+
   list.forEach((p) => {
 
     box.innerHTML += `
+    
       <div class="card">
 
         <img src="${p.image}" />
@@ -152,7 +238,12 @@ function renderProducts(list) {
 
         <b>${p.price} ₽</b>
 
-        <button onclick="addToCart('${p.name}', ${p.price})">
+        <button onclick="
+          addToCart(
+            '${p.name}',
+            '${p.price}'
+          )
+        ">
           В корзину
         </button>
 
@@ -162,18 +253,112 @@ function renderProducts(list) {
 }
 
 // =======================
-// CART (если есть)
+// CART
 // =======================
 function addToCart(name, price) {
 
   let cart =
-    JSON.parse(localStorage.getItem("cart")) || [];
+    JSON.parse(
+      localStorage.getItem("cart")
+    ) || [];
 
-  cart.push({ name, price });
+  cart.push({
+    name,
+    price
+  });
 
-  localStorage.setItem("cart", JSON.stringify(cart));
+  localStorage.setItem(
+    "cart",
+    JSON.stringify(cart)
+  );
 
-  alert("Добавлено в корзину");
+  loadCart();
+
+  alert("Товар добавлен");
+}
+
+// =======================
+// LOAD CART
+// =======================
+function loadCart() {
+
+  let cart =
+    JSON.parse(
+      localStorage.getItem("cart")
+    ) || [];
+
+  const box =
+    document.getElementById("cart");
+
+  box.innerHTML = "";
+
+  let total = 0;
+
+  cart.forEach((item, index) => {
+
+    total += Number(item.price);
+
+    box.innerHTML += `
+    
+      <div class="cart-item">
+
+        <p>${item.name}</p>
+
+        <b>${item.price} ₽</b>
+
+        <br>
+
+        <button onclick="removeCart(${index})">
+          ❌
+        </button>
+
+      </div>
+
+      <br>
+    `;
+  });
+
+  box.innerHTML += `
+    <hr><br>
+
+    <h3>
+      Итого: ${total} ₽
+    </h3>
+  `;
+}
+
+// =======================
+// REMOVE CART
+// =======================
+function removeCart(index) {
+
+  let cart =
+    JSON.parse(
+      localStorage.getItem("cart")
+    ) || [];
+
+  cart.splice(index, 1);
+
+  localStorage.setItem(
+    "cart",
+    JSON.stringify(cart)
+  );
+
+  loadCart();
+}
+
+// =======================
+// CHECKOUT
+// =======================
+function checkout() {
+
+  alert(
+    "Заказ оформлен! Мы свяжемся с вами."
+  );
+
+  localStorage.removeItem("cart");
+
+  loadCart();
 }
 
 // =======================
