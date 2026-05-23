@@ -2,46 +2,57 @@
 <html lang="ru">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Амурфиш — Магазин</title>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Амурфиш</title>
 
   <link rel="stylesheet" href="styles.css">
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 </head>
 
 <body>
 
-<!-- HEADER -->
 <header class="header">
 
   <div>
+
     <h1>Амурфиш</h1>
-    <p>Свежая рыба и морепродукты</p>
+
+    <p>
+      Свежая рыба и морепродукты
+    </p>
+
   </div>
 
-  <a class="tg-btn" href="https://t.me/amurfish_16_16" target="_blank">
+  <a
+    class="tg-btn"
+    href="https://t.me/amurfish_16_16"
+    target="_blank"
+  >
     Telegram
   </a>
 
 </header>
 
-<!-- MAIN -->
 <div class="layout">
 
-  <!-- LEFT -->
   <main>
 
-    <!-- TOP BAR -->
     <div class="topbar">
 
-      <h2>Каталог товаров</h2>
+      <h2>Каталог</h2>
 
       <input
         id="search"
-        placeholder="Поиск..."
+        placeholder="Поиск товаров..."
         oninput="searchProducts()"
       >
 
@@ -52,49 +63,4 @@
 
     <br>
 
-    <!-- СОРТИРОВКА -->
-    <div>
-
-      <button onclick="sortPrice('cheap')">
-        Сначала дешёвые
-      </button>
-
-      <button onclick="sortPrice('expensive')">
-        Сначала дорогие
-      </button>
-
-      <button onclick="sortPrice('default')">
-        Сброс
-      </button>
-
-    </div>
-
-    <br><br>
-
-    <!-- ТОВАРЫ -->
-    <div id="products"></div>
-
-  </main>
-
-  <!-- CART -->
-  <aside>
-
-    <h2>Корзина</h2>
-
-    <div id="cart"></div>
-
-    <br>
-
-    <button onclick="checkout()">
-      Оформить заказ
-    </button>
-
-  </aside>
-
-</div>
-
-<script src="app.js"></script>
-
-</body>
-
-</html>
+   
