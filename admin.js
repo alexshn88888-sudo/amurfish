@@ -10,9 +10,9 @@ const client = supabase.createClient(
   SUPABASE_KEY
 );
 
-// ======================
-// ДОБАВЛЕНИЕ ТОВАРА
-// ======================
+// =======================
+// ДОБАВИТЬ ТОВАР
+// =======================
 async function addProduct() {
 
   const name =
@@ -24,48 +24,118 @@ async function addProduct() {
   const description =
     document.getElementById("desc").value;
 
-  // КАРТИНКА ПО УМОЛЧАНИЮ
   const image =
-    "https://images.unsplash.com/photo-1544943910-4c1dc44aab44";
+    document.getElementById("image").value;
 
-  // ПРОВЕРКА ПОЛЕЙ
   if (!name || !price) {
-
-    console.log("Заполни поля");
-
     return;
   }
 
-  // ДОБАВЛЕНИЕ В SUPABASE
-  const { data, error } =
-    await client
-      .from("products")
-      .insert([
-        {
-          name: name,
-          price: price,
-          description: description,
-          image: image,
-          category: "fish"
-        }
-      ]);
+  const { error } = await client
+    .from("products")
+    .insert([
+      {
+        name,
+        price,
+        description,
+        image,
+        category: "fish"
+      }
+    ]);
 
-  // ОШИБКА
   if (error) {
-
     console.log(error);
-
     return;
   }
 
-  // УСПЕХ
-  console.log("Товар добавлен");
-
-  // ОЧИСТКА ПОЛЕЙ
+  // ОЧИСТКА
   document.getElementById("name").value = "";
   document.getElementById("price").value = "";
   document.getElementById("desc").value = "";
+  document.getElementById("image").value = "";
 
-  // ОБНОВЛЕНИЕ СТРАНИЦЫ
-  location.reload();
+  loadProducts();
 }
+
+// =======================
+// ЗАГРУЗИТЬ ТОВАРЫ
+// =======================
+async function loadProducts() {
+
+  const { data, error } =
+    await client
+      .from("products")
+      .select("*")
+      .order("id", { ascending: false });
+
+  if (error) {
+    console.log(error);
+    return;
+  }
+
+  renderProducts(data);
+}
+
+// =======================
+// ПОКАЗАТЬ ТОВАРЫ
+// =======================
+function renderProducts(products) {
+
+  const box =
+    document.getElementById("admin-products");
+
+  box.innerHTML = "";
+
+  products.forEach((p) => {
+
+    box.innerHTML += `
+    
+      <div class="card">
+
+        <img
+          src="${p.image || 'https://via.placeholder.com/300'}"
+        >
+
+        <h3>${p.name}</h3>
+
+        <p>${p.description || ""}</p>
+
+        <b>${p.price} ₽</b>
+
+        <br><br>
+
+        <button onclick="deleteProduct(${p.id})">
+          🗑 Удалить
+        </button>
+
+      </div>
+
+      <br>
+
+    `;
+  });
+}
+
+// =======================
+// УДАЛИТЬ ТОВАР
+// =======================
+async function deleteProduct(id) {
+
+  const { error } =
+    await client
+      .from("products")
+      .delete()
+      .eq("id", id);
+
+  if (error) {
+    console.log(error);
+    return;
+  }
+
+  loadProducts();
+}
+
+// =======================
+// INIT
+// =======================
+loadProducts();
