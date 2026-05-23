@@ -15,7 +15,7 @@
 <body>
 
 <!-- LOGIN -->
-<div id="login-box" style="padding:40px;max-width:400px;margin:auto">
+<div id="login-box" class="login-box">
 
   <h1>Вход в админку</h1>
 
@@ -33,44 +33,71 @@
 
 </div>
 
-<!-- ADMIN PANEL -->
+<!-- ADMIN -->
 <div
   id="admin-panel"
-  style="display:none;padding:20px;max-width:700px;margin:auto"
+  style="display:none"
 >
 
-  <h1>Амурфиш — Админка</h1>
+  <header class="header">
+    <h1>Амурфиш — Админка</h1>
+  </header>
 
-  <hr><br>
+  <div class="admin-wrap">
 
-  <h2>Добавить товар</h2>
+    <h2>Добавить товар</h2>
 
-  <input id="name" placeholder="Название товара">
-  <br><br>
+    <input id="name" placeholder="Название товара">
 
-  <input id="price" placeholder="Цена">
-  <br><br>
+    <br><br>
 
-  <textarea
-    id="desc"
-    placeholder="Описание"
-  ></textarea>
+    <input id="price" placeholder="Цена">
 
-  <br><br>
+    <br><br>
 
-  <input type="file" id="imageFile">
+    <textarea
+      id="desc"
+      placeholder="Описание"
+    ></textarea>
 
-  <br><br>
+    <br><br>
 
-  <button onclick="addProduct()">
-    Добавить товар
-  </button>
+    <input
+      type="file"
+      id="imageFile"
+    >
 
-  <hr><br>
+    <br><br>
 
-  <h2>Все товары</h2>
+    <!-- КАТЕГОРИИ -->
+    <select id="category"></select>
 
-  <div id="admin-products"></div>
+    <br><br>
+
+    <input
+      id="newCategory"
+      placeholder="Новая категория"
+    >
+
+    <br><br>
+
+    <button onclick="addCategory()">
+      ➕ Добавить категорию
+    </button>
+
+    <br><br>
+
+    <button onclick="addProduct()">
+      ➕ Добавить товар
+    </button>
+
+    <hr><br>
+
+    <h2>Все товары</h2>
+
+    <div id="admin-products"></div>
+
+  </div>
 
 </div>
 
