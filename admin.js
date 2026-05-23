@@ -9,35 +9,70 @@ const client = supabase.createClient(
 
 async function addProduct() {
 
+  const name =
+    document.getElementById("name").value;
+
+  const price =
+    document.getElementById("price").value;
+
+  const description =
+    document.getElementById("desc").value;
+
   const file =
     document.getElementById("img").files[0];
 
-  const reader = new FileReader();
-
-  reader.onload = async function () {
-
-    const product = {
-      name: document.getElementById("name").value,
-      price: document.getElementById("price").value,
-      description: document.getElementById("desc").value,
-      image: reader.result,
-      category: "fish"
-    };
+  // ЕСЛИ ФОТО НЕ ВЫБРАНО
+  if (!file) {
 
     const { error } = await client
       .from("products")
-      .insert([product]);
+      .insert([
+        {
+          name,
+          price,
+          description,
+          image: "",
+          category: "fish"
+        }
+      ]);
 
     if (error) {
       console.log(error);
-      alert("Ошибка");
+      alert("Ошибка добавления товара");
+      return;
+    }
+
+    alert("Товар добавлен!");
+    return;
+  }
+
+  // ЕСЛИ ЕСТЬ ФОТО
+  const reader = new FileReader();
+
+  reader.onload = async function (e) {
+
+    const imageBase64 = e.target.result;
+
+    const { error } = await client
+      .from("products")
+      .insert([
+        {
+          name,
+          price,
+          description,
+          image: imageBase64,
+          category: "fish"
+        }
+      ]);
+
+    if (error) {
+      console.log(error);
+      alert("Ошибка добавления товара");
       return;
     }
 
     alert("Товар добавлен!");
   };
 
-  if (file) {
-    reader.readAsDataURL(file);
-  }
+  reader.readAsDataURL(file);
 }
