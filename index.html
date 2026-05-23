@@ -22,6 +22,7 @@
 
 <div class="bg-glow"></div>
 
+<!-- HEADER -->
 <header class="header">
 
   <div class="logo-box">
@@ -29,14 +30,14 @@
     <h1>Амурфиш</h1>
 
     <p>
-      Свежая рыба и морепродукты
+      Premium seafood store
     </p>
 
   </div>
 
   <nav>
 
-    <a href="#products">
+    <a href="#catalog">
       Каталог
     </a>
 
@@ -51,31 +52,31 @@
 
 </header>
 
+<!-- HERO -->
 <section class="hero">
 
   <div class="hero-content">
 
     <div class="hero-badge">
-      🐟 PREMIUM SEAFOOD STORE
+      🐟 PREMIUM SEAFOOD
     </div>
 
     <h2>
       Свежая рыба и морепродукты
-      премиум качества
     </h2>
 
     <p>
-      Доставка свежей продукции,
-      честные цены и premium сервис.
+      Премиальное качество,
+      охлаждение и доставка.
     </p>
 
     <div class="hero-buttons">
 
       <a
         class="hero-btn"
-        href="#products"
+        href="#catalog"
       >
-        Смотреть каталог
+        Перейти в каталог
       </a>
 
       <a
@@ -92,47 +93,76 @@
 
 </section>
 
-<div class="layout">
+<!-- FEATURES -->
+<section class="features">
 
-  <main>
+  <div class="feature-card">
+    🚚 Быстрая доставка
+  </div>
 
-    <div class="topbar">
+  <div class="feature-card">
+    ❄️ Правильное хранение
+  </div>
 
-      <h2>Каталог</h2>
+  <div class="feature-card">
+    🐟 Свежий улов
+  </div>
 
-      <input
-        id="search"
-        placeholder="Поиск..."
-        oninput="searchProducts()"
-      >
+</section>
 
-    </div>
+<!-- CATALOG -->
+<section
+  id="catalog"
+  class="catalog-section"
+>
 
-    <div id="categories"></div>
+  <div class="catalog-header">
 
-    <br>
+    <h2>
+      Каталог товаров
+    </h2>
 
-    <div class="sort-box">
+    <input
+      id="search"
+      placeholder="Поиск товаров..."
+      oninput="searchProducts()"
+    >
 
-      <button onclick="sortPrice('cheap')">
-        Дешёвые
-      </button>
+  </div>
 
-      <button onclick="sortPrice('expensive')">
-        Дорогие
-      </button>
+  <!-- CATEGORIES -->
+  <div id="categories"></div>
 
-    </div>
+  <br>
 
-    <br><br>
+  <!-- SORT -->
+  <div class="sort-box">
 
-    <div id="products"></div>
+    <button onclick="sortPrice('cheap')">
+      Дешёвые
+    </button>
 
-  </main>
+    <button onclick="sortPrice('expensive')">
+      Дорогие
+    </button>
+
+  </div>
+
+  <br><br>
+
+  <!-- PRODUCTS -->
+  <div id="products"></div>
+
+</section>
+
+<!-- CART -->
+<div class="cart-floating">
 
   <aside>
 
-    <h2>Корзина</h2>
+    <h2>
+      Корзина
+    </h2>
 
     <div id="cart"></div>
 
