@@ -20,9 +20,13 @@
 
 <body>
 
+<!-- BACKGROUND -->
+<div class="bg-glow"></div>
+
+<!-- HEADER -->
 <header class="header">
 
-  <div>
+  <div class="logo-box">
 
     <h1>Амурфиш</h1>
 
@@ -32,23 +36,78 @@
 
   </div>
 
-  <a
-    class="tg-btn"
-    href="https://t.me/amurfish_16_16"
-    target="_blank"
-  >
-    Telegram
-  </a>
+  <nav>
+
+    <a href="#products">
+      Каталог
+    </a>
+
+    <a
+      href="https://t.me/amurfish_16_16"
+      target="_blank"
+    >
+      Telegram
+    </a>
+
+  </nav>
 
 </header>
 
+<!-- HERO -->
+<section class="hero">
+
+  <div class="hero-content">
+
+    <div class="hero-badge">
+      🐟 PREMIUM SEAFOOD STORE
+    </div>
+
+    <h2>
+      Свежая рыба и морепродукты
+      премиум качества
+    </h2>
+
+    <p>
+      Доставка свежей продукции.
+      Качество, охлаждение,
+      быстрая доставка и
+      честные цены.
+    </p>
+
+    <div class="hero-buttons">
+
+      <a
+        class="hero-btn"
+        href="#products"
+      >
+        Смотреть каталог
+      </a>
+
+      <a
+        class="hero-btn secondary"
+        href="https://t.me/amurfish_16_16"
+        target="_blank"
+      >
+        Telegram
+      </a>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- MAIN -->
 <div class="layout">
 
   <main>
 
+    <!-- TOPBAR -->
     <div class="topbar">
 
-      <h2>Каталог</h2>
+      <h2>
+        Каталог
+      </h2>
 
       <input
         id="search"
@@ -58,9 +117,81 @@
 
     </div>
 
-    <!-- КАТЕГОРИИ -->
+    <!-- CATEGORIES -->
     <div id="categories"></div>
 
     <br>
 
-   
+    <!-- SORT -->
+    <div class="sort-box">
+
+      <button onclick="sortPrice('cheap')">
+        Сначала дешёвые
+      </button>
+
+      <button onclick="sortPrice('expensive')">
+        Сначала дорогие
+      </button>
+
+      <button onclick="sortPrice('default')">
+        Сброс
+      </button>
+
+    </div>
+
+    <br><br>
+
+    <!-- PRODUCTS -->
+    <div id="products"></div>
+
+  </main>
+
+  <!-- CART -->
+  <aside>
+
+    <h2>
+      Корзина
+    </h2>
+
+    <div id="cart"></div>
+
+    <br>
+
+    <button
+      class="checkout-btn"
+      onclick="checkout()"
+    >
+      Оформить заказ
+    </button>
+
+  </aside>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+
+  <h3>
+    Амурфиш
+  </h3>
+
+  <p>
+    Свежая рыба и морепродукты
+  </p>
+
+  <br>
+
+  <a
+    href="https://t.me/amurfish_16_16"
+    target="_blank"
+  >
+    Telegram
+  </a>
+
+</footer>
+
+<script src="app.js"></script>
+
+</body>
+
+</html>
