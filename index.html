@@ -4,75 +4,96 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Амурфиш</title>
+
+  <title>Амурфиш — Магазин</title>
 
   <link rel="stylesheet" href="styles.css">
 
-  <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
 
-  <!-- HEADER -->
-  <header class="header">
+<!-- HEADER -->
+<header class="header">
 
-    <div>
-      <h1>Амурфиш</h1>
-      <p>Свежая рыба и морепродукты</p>
+  <div>
+    <h1>Амурфиш</h1>
+    <p>Свежая рыба и морепродукты</p>
+  </div>
+
+  <a class="tg-btn" href="https://t.me/amurfish_16_16" target="_blank">
+    Telegram
+  </a>
+
+</header>
+
+<!-- MAIN -->
+<div class="layout">
+
+  <!-- LEFT -->
+  <main>
+
+    <!-- TOP BAR -->
+    <div class="topbar">
+
+      <h2>Каталог товаров</h2>
+
+      <input
+        id="search"
+        placeholder="Поиск..."
+        oninput="searchProducts()"
+      >
+
     </div>
 
-    <a class="tg-btn" href="https://t.me/amurfish_16_16" target="_blank">
-      Telegram
-    </a>
+    <!-- КАТЕГОРИИ -->
+    <div id="categories"></div>
 
-  </header>
+    <br>
 
-  <!-- MAIN -->
-  <main class="layout">
+    <!-- СОРТИРОВКА -->
+    <div>
 
-    <!-- PRODUCTS -->
-    <section>
+      <button onclick="sortPrice('cheap')">
+        Сначала дешёвые
+      </button>
 
-      <div class="topbar">
-        <h2>Каталог</h2>
+      <button onclick="sortPrice('expensive')">
+        Сначала дорогие
+      </button>
 
-        <input
-          type="text"
-          id="search"
-          placeholder="Поиск товара..."
-          onkeyup="searchProducts()"
-        >
-      </div>
+      <button onclick="sortPrice('default')">
+        Сброс
+      </button>
 
-      <div id="products"></div>
+    </div>
 
-    </section>
+    <br><br>
 
-    <!-- CART -->
-    <aside>
-
-      <h2>Корзина</h2>
-
-      <div id="cart"></div>
-
-    </aside>
+    <!-- ТОВАРЫ -->
+    <div id="products"></div>
 
   </main>
 
-  <!-- FOOTER -->
-  <footer class="footer">
+  <!-- CART -->
+  <aside>
 
-    <p>© Амурфиш</p>
+    <h2>Корзина</h2>
 
-    <a href="admin.html">
-      Админка
-    </a>
+    <div id="cart"></div>
 
-  </footer>
+    <br>
 
-  <!-- APP -->
-  <script src="app.js"></script>
+    <button onclick="checkout()">
+      Оформить заказ
+    </button>
+
+  </aside>
+
+</div>
+
+<script src="app.js"></script>
 
 </body>
 
