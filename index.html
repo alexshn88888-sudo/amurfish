@@ -20,10 +20,8 @@
 
 <body>
 
-<!-- BACKGROUND -->
 <div class="bg-glow"></div>
 
-<!-- HEADER -->
 <header class="header">
 
   <div class="logo-box">
@@ -53,7 +51,6 @@
 
 </header>
 
-<!-- HERO -->
 <section class="hero">
 
   <div class="hero-content">
@@ -68,10 +65,8 @@
     </h2>
 
     <p>
-      Доставка свежей продукции.
-      Качество, охлаждение,
-      быстрая доставка и
-      честные цены.
+      Доставка свежей продукции,
+      честные цены и premium сервис.
     </p>
 
     <div class="hero-buttons">
@@ -97,61 +92,47 @@
 
 </section>
 
-<!-- MAIN -->
 <div class="layout">
 
   <main>
 
-    <!-- TOPBAR -->
     <div class="topbar">
 
-      <h2>
-        Каталог
-      </h2>
+      <h2>Каталог</h2>
 
       <input
         id="search"
-        placeholder="Поиск товаров..."
+        placeholder="Поиск..."
         oninput="searchProducts()"
       >
 
     </div>
 
-    <!-- CATEGORIES -->
     <div id="categories"></div>
 
     <br>
 
-    <!-- SORT -->
     <div class="sort-box">
 
       <button onclick="sortPrice('cheap')">
-        Сначала дешёвые
+        Дешёвые
       </button>
 
       <button onclick="sortPrice('expensive')">
-        Сначала дорогие
-      </button>
-
-      <button onclick="sortPrice('default')">
-        Сброс
+        Дорогие
       </button>
 
     </div>
 
     <br><br>
 
-    <!-- PRODUCTS -->
     <div id="products"></div>
 
   </main>
 
-  <!-- CART -->
   <aside>
 
-    <h2>
-      Корзина
-    </h2>
+    <h2>Корзина</h2>
 
     <div id="cart"></div>
 
@@ -167,28 +148,6 @@
   </aside>
 
 </div>
-
-<!-- FOOTER -->
-<footer class="footer">
-
-  <h3>
-    Амурфиш
-  </h3>
-
-  <p>
-    Свежая рыба и морепродукты
-  </p>
-
-  <br>
-
-  <a
-    href="https://t.me/amurfish_16_16"
-    target="_blank"
-  >
-    Telegram
-  </a>
-
-</footer>
 
 <script src="app.js"></script>
 
