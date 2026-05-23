@@ -3,7 +3,9 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Админка Амурфиш</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Амурфиш Админка</title>
 
   <link rel="stylesheet" href="styles.css">
 
@@ -13,10 +15,12 @@
 <body>
 
 <header class="header">
-  <h1>Админка Амурфиш</h1>
+  <h1>Амурфиш — Админка</h1>
 </header>
 
-<div style="padding:20px;max-width:500px">
+<div style="padding:20px;max-width:700px">
+
+  <h2>Добавить товар</h2>
 
   <input id="name" placeholder="Название товара">
   <br><br>
@@ -31,13 +35,22 @@
 
   <br><br>
 
-  <input type="file" id="img">
+  <input
+    id="image"
+    placeholder="Ссылка на фото"
+  >
 
   <br><br>
 
   <button onclick="addProduct()">
     Добавить товар
   </button>
+
+  <hr><br>
+
+  <h2>Все товары</h2>
+
+  <div id="admin-products"></div>
 
 </div>
 
