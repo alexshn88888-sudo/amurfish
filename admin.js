@@ -24,24 +24,45 @@ async function addProduct() {
   const description =
     document.getElementById("desc").value;
 
-  const image =
-    document.getElementById("image").value;
+  const file =
+    document.getElementById("imageFile").files[0];
 
-  if (!name || !price) {
+  if (!name || !price || !file) {
     return;
   }
 
-  const { error } = await client
-    .from("products")
-    .insert([
-      {
-        name,
-        price,
-        description,
-        image,
-        category: "fish"
-      }
-    ]);
+  // ИМЯ ФАЙЛА
+  const fileName =
+    Date.now() + "-" + file.name;
+
+  // ЗАГРУЗКА В STORAGE
+  const { error: uploadError } =
+    await client.storage
+      .from("products")
+      .upload(fileName, file);
+
+  if (uploadError) {
+    console.log(uploadError);
+    return;
+  }
+
+  // ССЫЛКА НА ФОТО
+  const imageUrl =
+    `${SUPABASE_URL}/storage/v1/object/public/products/${fileName}`;
+
+  // ДОБАВЛЕНИЕ ТОВАРА
+  const { error } =
+    await client
+      .from("products")
+      .insert([
+        {
+          name,
+          price,
+          description,
+          image: imageUrl,
+          category: "fish"
+        }
+      ]);
 
   if (error) {
     console.log(error);
@@ -52,13 +73,13 @@ async function addProduct() {
   document.getElementById("name").value = "";
   document.getElementById("price").value = "";
   document.getElementById("desc").value = "";
-  document.getElementById("image").value = "";
+  document.getElementById("imageFile").value = "";
 
   loadProducts();
 }
 
 // =======================
-// ЗАГРУЗИТЬ ТОВАРЫ
+// ЗАГРУЗКА ТОВАРОВ
 // =======================
 async function loadProducts() {
 
@@ -77,7 +98,7 @@ async function loadProducts() {
 }
 
 // =======================
-// ПОКАЗАТЬ ТОВАРЫ
+// ПОКАЗ ТОВАРОВ
 // =======================
 function renderProducts(products) {
 
@@ -92,9 +113,7 @@ function renderProducts(products) {
     
       <div class="card">
 
-        <img
-          src="${p.image || 'https://via.placeholder.com/300'}"
-        >
+        <img src="${p.image}" />
 
         <h3>${p.name}</h3>
 
@@ -111,13 +130,12 @@ function renderProducts(products) {
       </div>
 
       <br>
-
     `;
   });
 }
 
 // =======================
-// УДАЛИТЬ ТОВАР
+// УДАЛЕНИЕ
 // =======================
 async function deleteProduct(id) {
 
