@@ -1,4 +1,3 @@
-
 const SUPABASE_URL =
   "https://ombhbcsjwwnvqcwwytql.supabase.co";
 
@@ -9,6 +8,36 @@ const client = supabase.createClient(
   SUPABASE_URL,
   SUPABASE_KEY
 );
+
+// =======================
+// ПАРОЛЬ
+// =======================
+const ADMIN_PASSWORD = "amurfish2026";
+
+// =======================
+// LOGIN
+// =======================
+function login() {
+
+  const pass =
+    document.getElementById("password").value;
+
+  if (pass === ADMIN_PASSWORD) {
+
+    document.getElementById("login-box")
+      .style.display = "none";
+
+    document.getElementById("admin-panel")
+      .style.display = "block";
+
+    loadProducts();
+
+  } else {
+
+    alert("Неверный пароль");
+
+  }
+}
 
 // =======================
 // ДОБАВИТЬ ТОВАР
@@ -35,7 +64,7 @@ async function addProduct() {
   const fileName =
     Date.now() + "-" + file.name;
 
-  // ЗАГРУЗКА В STORAGE
+  // UPLOAD
   const { error: uploadError } =
     await client.storage
       .from("products")
@@ -46,11 +75,11 @@ async function addProduct() {
     return;
   }
 
-  // ССЫЛКА НА ФОТО
+  // URL
   const imageUrl =
     `${SUPABASE_URL}/storage/v1/object/public/products/${fileName}`;
 
-  // ДОБАВЛЕНИЕ ТОВАРА
+  // INSERT
   const { error } =
     await client
       .from("products")
@@ -69,7 +98,7 @@ async function addProduct() {
     return;
   }
 
-  // ОЧИСТКА
+  // CLEAR
   document.getElementById("name").value = "";
   document.getElementById("price").value = "";
   document.getElementById("desc").value = "";
@@ -79,7 +108,7 @@ async function addProduct() {
 }
 
 // =======================
-// ЗАГРУЗКА ТОВАРОВ
+// LOAD PRODUCTS
 // =======================
 async function loadProducts() {
 
@@ -98,7 +127,7 @@ async function loadProducts() {
 }
 
 // =======================
-// ПОКАЗ ТОВАРОВ
+// RENDER
 // =======================
 function renderProducts(products) {
 
@@ -135,7 +164,7 @@ function renderProducts(products) {
 }
 
 // =======================
-// УДАЛЕНИЕ
+// DELETE
 // =======================
 async function deleteProduct(id) {
 
@@ -152,8 +181,3 @@ async function deleteProduct(id) {
 
   loadProducts();
 }
-
-// =======================
-// INIT
-// =======================
-loadProducts();
