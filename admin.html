@@ -14,11 +14,34 @@
 
 <body>
 
-<header class="header">
-  <h1>Амурфиш — Админка</h1>
-</header>
+<!-- LOGIN -->
+<div id="login-box" style="padding:40px;max-width:400px;margin:auto">
 
-<div style="padding:20px;max-width:700px">
+  <h1>Вход в админку</h1>
+
+  <input
+    type="password"
+    id="password"
+    placeholder="Введите пароль"
+  >
+
+  <br><br>
+
+  <button onclick="login()">
+    Войти
+  </button>
+
+</div>
+
+<!-- ADMIN PANEL -->
+<div
+  id="admin-panel"
+  style="display:none;padding:20px;max-width:700px;margin:auto"
+>
+
+  <h1>Амурфиш — Админка</h1>
+
+  <hr><br>
 
   <h2>Добавить товар</h2>
 
@@ -35,7 +58,6 @@
 
   <br><br>
 
-  <!-- ФОТО С КОМПА -->
   <input type="file" id="imageFile">
 
   <br><br>
@@ -55,4 +77,5 @@
 <script src="admin.js"></script>
 
 </body>
+
 </html>
