@@ -10,6 +10,9 @@ const client = supabase.createClient(
   SUPABASE_KEY
 );
 
+// ======================
+// ДОБАВЛЕНИЕ ТОВАРА
+// ======================
 async function addProduct() {
 
   const name =
@@ -21,41 +24,48 @@ async function addProduct() {
   const description =
     document.getElementById("desc").value;
 
-  // ПРОСТАЯ КАРТИНКА ПО УМОЛЧАНИЮ
+  // КАРТИНКА ПО УМОЛЧАНИЮ
   const image =
     "https://images.unsplash.com/photo-1544943910-4c1dc44aab44";
 
-  // ПРОВЕРКА
+  // ПРОВЕРКА ПОЛЕЙ
   if (!name || !price) {
-    alert("Заполни название и цену");
+
+    console.log("Заполни поля");
+
     return;
   }
 
-  // ДОБАВЛЕНИЕ
-  const { error } = await client
-    .from("products")
-    .insert([
-      {
-        name,
-        price,
-        description,
-        image,
-        category: "fish"
-      }
-    ]);
+  // ДОБАВЛЕНИЕ В SUPABASE
+  const { data, error } =
+    await client
+      .from("products")
+      .insert([
+        {
+          name: name,
+          price: price,
+          description: description,
+          image: image,
+          category: "fish"
+        }
+      ]);
 
   // ОШИБКА
   if (error) {
+
     console.log(error);
-    alert("Ошибка добавления");
+
     return;
   }
 
   // УСПЕХ
-  alert("Товар успешно добавлен!");
+  console.log("Товар добавлен");
 
-  // ОЧИСТКА
+  // ОЧИСТКА ПОЛЕЙ
   document.getElementById("name").value = "";
   document.getElementById("price").value = "";
   document.getElementById("desc").value = "";
+
+  // ОБНОВЛЕНИЕ СТРАНИЦЫ
+  location.reload();
 }
