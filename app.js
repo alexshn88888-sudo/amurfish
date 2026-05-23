@@ -81,29 +81,76 @@ function renderCategories() {
     document.getElementById("categories");
 
   box.innerHTML = `
-    <button onclick="filterByCategory('all')">
-      Все
+  
+    <button
+      class="category-btn active"
+      onclick="filterByCategory('all', this)"
+    >
+      🔥 Все
     </button>
+
   `;
 
   categories.forEach((c) => {
 
+    let icon = "📦";
+
+    if (c.name === "Рыба")
+      icon = "🐟";
+
+    if (c.name === "Соусы")
+      icon = "🧂";
+
+    if (c.name === "Масла")
+      icon = "🫒";
+
+    if (c.name === "Морепродукты")
+      icon = "🍤";
+
+    if (c.name === "Икра")
+      icon = "🥚";
+
+    if (c.name === "Заморозка")
+      icon = "❄️";
+
+    if (c.name === "Консервы")
+      icon = "🥫";
+
     box.innerHTML += `
-      <button onclick="
-        filterByCategory('${c.name}')
-      ">
-        ${c.name}
+    
+      <button
+        class="category-btn"
+        onclick="
+          filterByCategory(
+            '${c.name}',
+            this
+          )
+        "
+      >
+        ${icon} ${c.name}
       </button>
     `;
   });
 }
 
 // =======================
-// CATEGORY FILTER
+// FILTER CATEGORY
 // =======================
-function filterByCategory(category) {
+function filterByCategory(category, el) {
 
   currentCategory = category;
+
+  document
+    .querySelectorAll(".category-btn")
+    .forEach(btn => {
+
+      btn.classList.remove("active");
+    });
+
+  if (el) {
+
+    el.classList.add("active");
+  }
 
   searchProducts();
 }
@@ -121,7 +168,7 @@ function searchProducts() {
 
   let filtered = [...products];
 
-  // CATEGORY
+  // CATEGORY FILTER
   if (currentCategory !== "all") {
 
     filtered = filtered.filter(
@@ -129,7 +176,7 @@ function searchProducts() {
     );
   }
 
-  // SEARCH
+  // SEARCH FILTER
   filtered = filtered.filter((p) => {
 
     const name =
@@ -185,7 +232,6 @@ function sortPrice(type) {
     );
   });
 
-  // SORT
   if (type === "cheap") {
 
     filtered.sort(
@@ -230,66 +276,106 @@ function renderProducts(list) {
     return;
   }
 
+  // GROUP PRODUCTS
+  const grouped = {};
+
   list.forEach((p) => {
 
-    const oldPrice =
-      p.old_price
-      ? `
-        <span class="old-price">
-          ${p.old_price} ₽
-        </span>
-      `
-      : "";
+    const category =
+      p.category || "Другое";
 
-    const badge =
-      p.badge
-      ? `
-        <div class="badge">
-          ${p.badge}
-        </div>
-      `
-      : "";
+    if (!grouped[category]) {
+
+      grouped[category] = [];
+    }
+
+    grouped[category].push(p);
+  });
+
+  // RENDER GROUPS
+  Object.keys(grouped).forEach((category) => {
 
     box.innerHTML += `
     
-      <div class="card">
+      <div class="section-title">
+        ${category}
+      </div>
 
-        ${badge}
+      <div
+        class="products-grid"
+        id="group-${category}"
+      ></div>
 
-        <button
-          class="fav-btn"
-          onclick="toggleFavorite('${p.id}')"
-        >
-          ❤️
-        </button>
+    `;
 
-        <img src="${p.image}" />
+    const group =
+      document.getElementById(
+        `group-${category}`
+      );
 
-        <h3>${p.name}</h3>
+    grouped[category].forEach((p) => {
 
-        <p>
-          ${p.description || ""}
-        </p>
+      const oldPrice =
+        p.old_price
+        ? `
+          <span class="old-price">
+            ${p.old_price} ₽
+          </span>
+        `
+        : "";
 
-        <div class="price-box">
+      const badge =
+        p.badge
+        ? `
+          <div class="badge">
+            ${p.badge}
+          </div>
+        `
+        : "";
 
-          <b>${p.price} ₽</b>
+      group.innerHTML += `
+      
+        <div class="card">
 
-          ${oldPrice}
+          ${badge}
+
+          <button
+            class="fav-btn"
+            onclick="
+              toggleFavorite('${p.id}')
+            "
+          >
+            ❤️
+          </button>
+
+          <img src="${p.image}" />
+
+          <h3>${p.name}</h3>
+
+          <p>
+            ${p.description || ""}
+          </p>
+
+          <div class="price-box">
+
+            <b>${p.price} ₽</b>
+
+            ${oldPrice}
+
+          </div>
+
+          <button onclick="
+            addToCart(
+              '${p.name}',
+              '${p.price}'
+            )
+          ">
+            В корзину
+          </button>
 
         </div>
-
-        <button onclick="
-          addToCart(
-            '${p.name}',
-            '${p.price}'
-          )
-        ">
-          В корзину
-        </button>
-
-      </div>
-    `;
+      `;
+    });
   });
 }
 
@@ -477,7 +563,6 @@ function checkout() {
   text +=
     `%0A💰 Итого: ${total} ₽`;
 
-  // TELEGRAM USERNAME
   const username =
     "amurfish_16_16";
 
