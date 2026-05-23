@@ -1,4 +1,3 @@
-
 const SUPABASE_URL =
   "https://ombhbcsjwwnvqcwwytql.supabase.co";
 
@@ -11,9 +10,10 @@ const client = supabase.createClient(
 );
 
 // =======================
-// ПАРОЛЬ
+// PASSWORD
 // =======================
-const ADMIN_PASSWORD = "amurfish2026";
+const ADMIN_PASSWORD =
+  "amurfish2026";
 
 // =======================
 // LOGIN
@@ -32,6 +32,7 @@ function login() {
       .style.display = "block";
 
     loadProducts();
+    loadCategories();
 
   } else {
 
@@ -41,7 +42,64 @@ function login() {
 }
 
 // =======================
-// ДОБАВИТЬ ТОВАР
+// ADD CATEGORY
+// =======================
+async function addCategory() {
+
+  const name =
+    document.getElementById("newCategory").value;
+
+  if (!name) return;
+
+  const { error } =
+    await client
+      .from("categories")
+      .insert([
+        { name }
+      ]);
+
+  if (error) {
+    console.log(error);
+    return;
+  }
+
+  document.getElementById("newCategory").value = "";
+
+  loadCategories();
+}
+
+// =======================
+// LOAD CATEGORIES
+// =======================
+async function loadCategories() {
+
+  const { data, error } =
+    await client
+      .from("categories")
+      .select("*");
+
+  if (error) {
+    console.log(error);
+    return;
+  }
+
+  const select =
+    document.getElementById("category");
+
+  select.innerHTML = "";
+
+  data.forEach((c) => {
+
+    select.innerHTML += `
+      <option value="${c.name}">
+        ${c.name}
+      </option>
+    `;
+  });
+}
+
+// =======================
+// ADD PRODUCT
 // =======================
 async function addProduct() {
 
@@ -53,6 +111,9 @@ async function addProduct() {
 
   const description =
     document.getElementById("desc").value;
+
+  const category =
+    document.getElementById("category").value;
 
   const file =
     document.getElementById("imageFile").files[0];
@@ -88,7 +149,7 @@ async function addProduct() {
           price,
           description,
           image: imageUrl,
-          category: "fish"
+          category
         }
       ]);
 
@@ -97,7 +158,6 @@ async function addProduct() {
     return;
   }
 
-  // CLEAR
   document.getElementById("name").value = "";
   document.getElementById("price").value = "";
   document.getElementById("desc").value = "";
@@ -115,7 +175,9 @@ async function loadProducts() {
     await client
       .from("products")
       .select("*")
-      .order("id", { ascending: false });
+      .order("id", {
+        ascending: false
+      });
 
   if (error) {
     console.log(error);
@@ -145,8 +207,9 @@ function renderProducts(products) {
           src="${p.image}"
           style="
             width:100%;
-            max-width:250px;
-            border-radius:12px;
+            height:240px;
+            object-fit:cover;
+            border-radius:18px;
           "
         >
 
@@ -175,6 +238,8 @@ function renderProducts(products) {
         <button onclick="updateProduct(${p.id})">
           💾 Сохранить
         </button>
+
+        <br><br>
 
         <button onclick="deleteProduct(${p.id})">
           🗑 Удалить
