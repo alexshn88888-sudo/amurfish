@@ -39,7 +39,9 @@ async function loadProducts() {
       });
 
   if (error) {
+
     console.log(error);
+
     return;
   }
 
@@ -59,7 +61,9 @@ async function loadCategories() {
       .select("*");
 
   if (error) {
+
     console.log(error);
+
     return;
   }
 
@@ -85,7 +89,9 @@ function renderCategories() {
   categories.forEach((c) => {
 
     box.innerHTML += `
-      <button onclick="filterByCategory('${c.name}')">
+      <button onclick="
+        filterByCategory('${c.name}')
+      ">
         ${c.name}
       </button>
     `;
@@ -93,7 +99,7 @@ function renderCategories() {
 }
 
 // =======================
-// FILTER CATEGORY
+// CATEGORY FILTER
 // =======================
 function filterByCategory(category) {
 
@@ -127,10 +133,12 @@ function searchProducts() {
   filtered = filtered.filter((p) => {
 
     const name =
-      (p.name || "").toLowerCase();
+      (p.name || "")
+      .toLowerCase();
 
     const desc =
-      (p.description || "").toLowerCase();
+      (p.description || "")
+      .toLowerCase();
 
     return (
       name.includes(value) ||
@@ -142,7 +150,7 @@ function searchProducts() {
 }
 
 // =======================
-// SORT
+// SORT PRICE
 // =======================
 function sortPrice(type) {
 
@@ -164,10 +172,12 @@ function sortPrice(type) {
   filtered = filtered.filter((p) => {
 
     const name =
-      (p.name || "").toLowerCase();
+      (p.name || "")
+      .toLowerCase();
 
     const desc =
-      (p.description || "").toLowerCase();
+      (p.description || "")
+      .toLowerCase();
 
     return (
       name.includes(value) ||
@@ -175,6 +185,7 @@ function sortPrice(type) {
     );
   });
 
+  // SORT
   if (type === "cheap") {
 
     filtered.sort(
@@ -210,7 +221,9 @@ function renderProducts(list) {
 
     box.innerHTML = `
       <div class="card">
-        <h2>Ничего не найдено 😢</h2>
+        <h2>
+          Ничего не найдено 😢
+        </h2>
       </div>
     `;
 
@@ -221,12 +234,20 @@ function renderProducts(list) {
 
     const oldPrice =
       p.old_price
-      ? `<span class="old-price">${p.old_price} ₽</span>`
+      ? `
+        <span class="old-price">
+          ${p.old_price} ₽
+        </span>
+      `
       : "";
 
     const badge =
       p.badge
-      ? `<div class="badge">${p.badge}</div>`
+      ? `
+        <div class="badge">
+          ${p.badge}
+        </div>
+      `
       : "";
 
     box.innerHTML += `
@@ -246,7 +267,9 @@ function renderProducts(list) {
 
         <h3>${p.name}</h3>
 
-        <p>${p.description || ""}</p>
+        <p>
+          ${p.description || ""}
+        </p>
 
         <div class="price-box">
 
@@ -299,7 +322,7 @@ function toggleFavorite(id) {
 }
 
 // =======================
-// CART
+// ADD TO CART
 // =======================
 function addToCart(name, price) {
 
@@ -368,12 +391,16 @@ function loadCart() {
           × ${item.quantity}
         </p>
 
-        <b>${item.price} ₽</b>
+        <b>
+          ${item.price} ₽
+        </b>
 
-        <br>
+        <br><br>
 
-        <button onclick="removeCart(${index})">
-          ❌
+        <button onclick="
+          removeCart(${index})
+        ">
+          ❌ Удалить
         </button>
 
       </div>
@@ -383,10 +410,12 @@ function loadCart() {
   });
 
   box.innerHTML += `
+  
     <hr><br>
 
     <h3>
-      Итого: ${total} ₽
+      Итого:
+      ${total} ₽
     </h3>
   `;
 }
@@ -412,17 +441,50 @@ function removeCart(index) {
 }
 
 // =======================
-// CHECKOUT
+// TELEGRAM CHECKOUT
 // =======================
 function checkout() {
 
-  alert(
-    "Заказ оформлен!"
+  let cart =
+    JSON.parse(
+      localStorage.getItem("cart")
+    ) || [];
+
+  if (cart.length === 0) {
+
+    alert("Корзина пустая");
+
+    return;
+  }
+
+  let text =
+    "🛒 Новый заказ:%0A%0A";
+
+  let total = 0;
+
+  cart.forEach((item) => {
+
+    const sum =
+      Number(item.price) *
+      item.quantity;
+
+    total += sum;
+
+    text +=
+      `• ${item.name} x${item.quantity} — ${sum} ₽%0A`;
+  });
+
+  text +=
+    `%0A💰 Итого: ${total} ₽`;
+
+  // TELEGRAM USERNAME
+  const username =
+    "amurfish_16_16";
+
+  window.open(
+    `https://t.me/${username}?text=${text}`,
+    "_blank"
   );
-
-  localStorage.removeItem("cart");
-
-  loadCart();
 }
 
 // =======================
