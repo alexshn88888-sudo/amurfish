@@ -1,3 +1,4 @@
+
 const SUPABASE_URL =
   "https://ombhbcsjwwnvqcwwytql.supabase.co";
 
@@ -60,11 +61,10 @@ async function addProduct() {
     return;
   }
 
-  // ИМЯ ФАЙЛА
   const fileName =
     Date.now() + "-" + file.name;
 
-  // UPLOAD
+  // UPLOAD IMAGE
   const { error: uploadError } =
     await client.storage
       .from("products")
@@ -75,11 +75,10 @@ async function addProduct() {
     return;
   }
 
-  // URL
   const imageUrl =
     `${SUPABASE_URL}/storage/v1/object/public/products/${fileName}`;
 
-  // INSERT
+  // INSERT PRODUCT
   const { error } =
     await client
       .from("products")
@@ -127,7 +126,7 @@ async function loadProducts() {
 }
 
 // =======================
-// RENDER
+// RENDER PRODUCTS
 // =======================
 function renderProducts(products) {
 
@@ -142,15 +141,40 @@ function renderProducts(products) {
     
       <div class="card">
 
-        <img src="${p.image}" />
-
-        <h3>${p.name}</h3>
-
-        <p>${p.description || ""}</p>
-
-        <b>${p.price} ₽</b>
+        <img
+          src="${p.image}"
+          style="
+            width:100%;
+            max-width:250px;
+            border-radius:12px;
+          "
+        >
 
         <br><br>
+
+        <input
+          id="name-${p.id}"
+          value="${p.name}"
+        >
+
+        <br><br>
+
+        <input
+          id="price-${p.id}"
+          value="${p.price}"
+        >
+
+        <br><br>
+
+        <textarea
+          id="desc-${p.id}"
+        >${p.description || ""}</textarea>
+
+        <br><br>
+
+        <button onclick="updateProduct(${p.id})">
+          💾 Сохранить
+        </button>
 
         <button onclick="deleteProduct(${p.id})">
           🗑 Удалить
@@ -164,7 +188,39 @@ function renderProducts(products) {
 }
 
 // =======================
-// DELETE
+// UPDATE PRODUCT
+// =======================
+async function updateProduct(id) {
+
+  const name =
+    document.getElementById(`name-${id}`).value;
+
+  const price =
+    document.getElementById(`price-${id}`).value;
+
+  const description =
+    document.getElementById(`desc-${id}`).value;
+
+  const { error } =
+    await client
+      .from("products")
+      .update({
+        name,
+        price,
+        description
+      })
+      .eq("id", id);
+
+  if (error) {
+    console.log(error);
+    return;
+  }
+
+  loadProducts();
+}
+
+// =======================
+// DELETE PRODUCT
 // =======================
 async function deleteProduct(id) {
 
